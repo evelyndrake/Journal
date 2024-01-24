@@ -12,14 +12,6 @@ app.use(express.static('public')); // static files
 var path = require('path');
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'views')));
-// app.listen(3000, () => {
-//     console.log('Server is running on port 3000');
-//     });
-// connect to database
-// mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true }, () => {console.log("Connected to db!");app.listen(3000, () => console.log("Server Up and running"));});
-
-
-
 
 async function main() {
     try {
@@ -58,8 +50,8 @@ app.get('/', async (req, res) => {
         }
     } else {
         // Access denied...
-        res.set('WWW-Authenticate', 'Basic realm="401"'); // change this
-        res.status(401).send('Authentication required.'); // custom message
+        res.set('WWW-Authenticate', 'Basic realm="401"');
+        res.status(401).send('Authentication required.');
     }
     
 });
@@ -113,23 +105,6 @@ app.post('/', async (req, res) => {
     } catch (err) {
         res.redirect('/');
     }
-    
-    // var jsonData = {};
-    // // add form data to json
-    // // positive things
-    // jsonData.pos1 = req.body.pos1;
-    // jsonData.pos2 = req.body.pos2;
-    // jsonData.pos3 = req.body.pos3;
-    // // triggers
-    // jsonData.triggers = req.body.triggers;
-    // // comments
-    // jsonData.comments = req.body.comments;
-    // // add todays date to json
-    // jsonData.date = ;
-    // console.log(jsonData);
-    // tell client submission was recieved
-    // res.sendStatus(204);
-    // eventually update database entry corresponding to date with json data
 });
 
 app.get('/history', async (req, res) => {
@@ -148,8 +123,8 @@ app.get('/history', async (req, res) => {
         }
     } else {
         // Access denied...
-        res.set('WWW-Authenticate', 'Basic realm="401"'); // change this
-        res.status(401).send('Authentication required.'); // custom message
+        res.set('WWW-Authenticate', 'Basic realm="401"');
+        res.status(401).send('Authentication required.');
     }
         
     
