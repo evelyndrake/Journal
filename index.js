@@ -6,12 +6,13 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const moment = require('moment');
-
-app.use(express.static('public')); // static files
+const favicon = require('serve-favicon')
 
 var path = require('path');
+app.use(express.static('public')); // static files
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'views')));
+app.use(favicon(path.join(__dirname, 'favicon.ico')))
 
 async function main() {
     try {
