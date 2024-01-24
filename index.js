@@ -26,7 +26,7 @@ main();
 
 app.set('view engine', 'ejs');
 app.get('/', async (req, res) => {
-    const auth = {login: 'evelyn', password: process.env.PASSWORD};
+    const auth = {login: process.env.USERNAME, password: process.env.PASSWORD};
     // parse login and password from headers
     const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
     const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':');
@@ -108,7 +108,7 @@ app.post('/', async (req, res) => {
 });
 
 app.get('/history', async (req, res) => {
-    const auth = {login: 'evelyn', password: process.env.PASSWORD};
+    const auth = {login: process.env.USERNAME, password: process.env.PASSWORD};
     // parse login and password from headers
     const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
     const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':');
