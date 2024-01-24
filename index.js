@@ -18,6 +18,9 @@ app.use(express.static(path.join(__dirname, 'views')));
 // connect to database
 // mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true }, () => {console.log("Connected to db!");app.listen(3000, () => console.log("Server Up and running"));});
 
+
+
+
 async function main() {
     try {
         await mongoose.connect(process.env.DB_CONNECT, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -31,21 +34,34 @@ main();
 
 app.set('view engine', 'ejs');
 app.get('/', async (req, res) => {
-    try {
-        const entries = await Entry.find({});
-        let today = moment().startOf('day').toDate();
-        today.setHours(0, 0, 0, 0); // Set the time to 00:00:00 for comparison
-
-        let entryForTodayExists = entries.some(entry => {
-            let entryDate = moment(entry.date).toDate();
-            entryDate.setHours(0, 0, 0, 0); // Set the time to 00:00:00 for comparison
-            return entryDate.getTime() === today.getTime();
-        });
-        res.render('list.ejs', { entries, entryForTodayExists });
-    } catch (err) {
-        console.error(err);
-        res.status(500).send('An error occurred while retrieving entries');
+    const auth = {login: 'evelyn', password: process.env.PASSWORD};
+    // parse login and password from headers
+    const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
+    const [login, password] = Buffer.from(b64auth, 'base64').toString().split(':');
+    // Verify login and password are set and correct
+    if (login && password && login === auth.login && password === auth.password) {
+        // Access granted...
+        try {
+            const entries = await Entry.find({});
+            let today = moment().startOf('day').toDate();
+            today.setHours(0, 0, 0, 0); // Set the time to 00:00:00 for comparison
+    
+            let entryForTodayExists = entries.some(entry => {
+                let entryDate = moment(entry.date).toDate();
+                entryDate.setHours(0, 0, 0, 0); // Set the time to 00:00:00 for comparison
+                return entryDate.getTime() === today.getTime();
+            });
+            res.render('list.ejs', { entries, entryForTodayExists });
+        } catch (err) {
+            console.error(err);
+            res.status(500).send('An error occurred while retrieving entries');
+        }
+    } else {
+        // Access denied...
+        res.set('WWW-Authenticate', 'Basic realm="401"'); // change this
+        res.status(401).send('Authentication required.'); // custom message
     }
+    
 });
 app.use(express.urlencoded({ extended: true }));
 
