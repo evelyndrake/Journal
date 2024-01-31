@@ -40,7 +40,7 @@
             </aside>
             
             <main role="main" class="w-full sm:w-2/3 md:w-3/4 pt-1 px-2">
-                <h1 class="text-2xl" id="home">Previous Entries</h1>
+                <h1 class="text-2xl font-bold text-primary" id="home">Previous Entries</h1>
                 <hr class="my-5">
                 <ul class="entry-list">
                     <% entries.sort((a, b) => new Date(b.date) - new Date(a.date)).reverse().forEach(details => { %>
@@ -91,11 +91,9 @@
 
                     </li><% }) %>
                 </ul>
-                <hr class="my-5">
-                <h1 class="text-2xl" id="home">Mood History</h1>
-                <hr class="my-5">
+                <h1 class="text-xl mt-3" id="home">Mood History</h1>
                 <!-- chart passed in -->
-                <canvas id="myChart"></canvas>
+                <canvas id="myChart" class="mt-3"></canvas>
                 <!-- button to load 5 more entries -->
                 <!-- <button class="load-more bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 mt-3 rounded onClick="loadMore">
                     Load More
