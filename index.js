@@ -7,6 +7,7 @@ const app = express();
 const mongoose = require('mongoose');
 const moment = require('moment');
 const favicon = require('serve-favicon')
+const chartjs = require('chart.js');
 
 var path = require('path');
 app.use(express.static('public')); // static files
@@ -117,6 +118,15 @@ app.get('/history', async (req, res) => {
     if (login && password && login === auth.login && password === auth.password) {
         try {
             const entries = await Entry.find({});
+            const entries2 = entries;
+            // generate chart based on rating over time
+            let ratings = [];
+            let dates = [];
+            entries2.forEach(entry => {
+                ratings.push(entry.rating);
+                dates.push(entry.date);
+            });
+            
             res.render('history.ejs', { entries });
         } catch (err) {
             console.error(err);

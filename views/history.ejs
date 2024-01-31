@@ -7,6 +7,7 @@
 <head>
 
     <title>My Journal</title>
+    
     <!-- <link rel="stylesheet" href="/src/output.css" type="text/css"> -->
     <link rel='stylesheet' href="/output.css" type="text/css" />
     <!-- load output.css from src -->
@@ -90,13 +91,56 @@
 
                     </li><% }) %>
                 </ul>
+                <hr class="my-5">
+                <h1 class="text-2xl" id="home">Mood History</h1>
+                <hr class="my-5">
+                <!-- chart passed in -->
+                <canvas id="myChart"></canvas>
                 <!-- button to load 5 more entries -->
                 <!-- <button class="load-more bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 mt-3 rounded onClick="loadMore">
                     Load More
                 </button> -->
+                
             </main>
         </div>
     </div>
+    <script src=" https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js "></script>
+    <script>
+
+        let entries = <%- JSON.stringify(entries) %>; // Send entries to the client
+    
+        let ratings = [];
+        let dates = [];
+        entries.forEach(entry => {
+            ratings.push(entry.rating);
+            dates.push(entry.date);
+        });
+        let gradientColors = ratings.map((rating, index) => {
+            let ctx = document.getElementById('myChart').getContext('2d');
+            let gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, rating > 5 ? 'green' : 'red'); // Change colors based on your needs
+            gradient.addColorStop(1, 'white');
+            return gradient;
+        });
+
+        let ctx = document.getElementById('myChart').getContext('2d');
+        let chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: 'Rating',
+                    data: ratings,
+                    borderColor: 'white',
+                    borderWidth: 0.5,
+                    pointRadius: 8,
+                    backgroundColor: gradientColors,
+                    tension: 0.25
+                }]
+            },
+            options: {plugins: {legend: {display: false}}}
+        });
+    </script>
 </body>
 
 
